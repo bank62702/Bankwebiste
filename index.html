@@ -1,0 +1,344 @@
+<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Banking App</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} 
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+min-height: 100vh;
+    background-color: #f4f4f4;
+} 
+/* Container styles */
+.container {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+flex: 1;
+} 
+/* Specific styles for pages */
+.page {
+    display: flex; /* Use flexbox to align content */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: 100vh; /* Full height of viewport */
+} 
+
+/* Welcome card styles */
+.welcome-card {
+    background-color: #007bff; /* Blue color */
+color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Balance card styles */
+.balance-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff; /* Blue color */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    position: relative;
+} 
+/* Eye icon styles */
+.eye-icon {
+    cursor: pointer;
+} 
+/* Heading styles */
+h2 {
+    margin-bottom: 10px; /* Reduced margin for better spacing */
+} 
+/* Form and button styles */
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+} 
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+} 
+
+button:hover {
+    background-color: #45a049;
+} 
+/* Navbar styles */
+.navbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+} 
+#navToggle {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+} 
+#navMenu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+} 
+#navMenu ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+} 
+
+#navMenu ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+} 
+
+#navMenu ul li a:hover {
+    background-color: #f4f4f4;
+} 
+
+/* Funds analysis section */
+.funds-analysis {
+    margin: 20px 0;
+} 
+/* Success icon */
+.thumb-up {
+    font-size: 50px;
+    color: #4CAF50;
+} 
+
+/* Responsive design for larger screens */
+@media (min-width: 768px) {
+    .container {
+        max-width: 500px;
+    }
+} 
+
+/* Responsive design for smaller screens */
+@media (max-width: 480px) {
+    body {
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 20px;
+    } 
+
+ .container {
+        width: 100%;
+        padding: 15px;
+    }
+}
+</style>
+
+</head>
+<body>
+    <div id="page1" class="page">
+  <div class="container">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="validateLogin()">Login</button> <!-- Added validateLogin() here -->
+<p id="error-message" style="color: red;"></p> <!-- Error message display -->
+        </div>
+    </div>
+        
+    <div id="page2" class="container page" style="display: none;">
+        <div class="navbar">
+            <button id="navToggle" onclick="toggleNav()">☰</button>
+            <div id="navMenu" style="display: none;">
+                <ul>
+<li><a href="#">Wallet</a></li>
+                    <li><a href="#">Security</a></li>
+<li><a href="#" onclick="logout()">Logout</a></li>
+</ul>
+            </div>
+        </div>
+        <h2>Dashboard</h2>
+        
+        <div class="welcome-card">
+            <p>Welcome, James</p>
+           
+        </div>
+<div class="balance-card">
+            <span>Balance: <span id="balanceValue">$12,000,000.00</span> <span class="eye-icon" onclick="toggleBalance()">👁️</span></span>
+        </div>
+        <div class="funds-analysis">
+            <p>Funds Analysis</p>
+            <canvas id="fundChart" width="400" height="400"></canvas>
+</div>
+        <button onclick="transferFunds()">Transfer Funds</button>
+    </div> 
+
+ <div id="page3" class="container page" style="display: none;">
+        <h2>Transfer Funds</h2>
+        <div>
+            <input type="text" placeholder="Amount" />
+            <input type="text" placeholder="Number" />
+            <select>
+<option>Select Bank</option>
+                <option>JPMorgan Chase</option>
+                <option>Bank of America Financial Center</option>
+<option>Wells Fargo Bank</option>
+                <option>Citibank</option>
+                <option>PNC Bank</option>
+                <option>Goldman Sachs</option>
+                <option>Truist Financial</option>
+                <option>Capital One Bank</option>
+                <option>TD Group Holdings</option>
+                <option>BNY</option>
+ <option>BMO Bank of Montreal</option>
+                <option>Citizens Bank</option>
+                <option>Fifth Third Bank</option>
+                <option>Recipient 1</option>
+                <option>Recipient 2</option>
+            </select>
+            <button onclick="sendFunds()">Send 
+Funds</button>
+        </div>
+    </div> 
+ <div id="page4" class="container page" style="display: none;">
+        <div class="error-icon" style="font-size: 50px; color: red;">🔴</div> <!-- Red circle icon -->
+        <h2>Payment Failed</h2>
+        <p>Please check your connection.</p> <!-- Updated message -->
+<script src="script.js"></script>
+
+
+<script>
+// Function to validate login credentials
+function validateLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Check if the username and password match
+    if (username === 'gift' && password === 'marvelous') {
+        login(); // Proceed to dashboard if credentials are correct
+
+  } else {
+        document.getElementById('error-message').innerText = 'Invalid username or password. Please try again.';
+    }
+}
+
+// Function to handle login
+function login() {
+    document.getElementById('page1').style.display = 'none';
+    document.getElementById('page2').style.display = 'flex';
+    loadFundChart(); // Load the fund chart with dynamic balance data
+}
+
+// Function to handle logout
+function logout() {
+    document.getElementById('page2').style.display = 'none';
+    document.getElementById('page1').style.display = 'flex';
+    document.getElementById('navMenu').style.display = 'none'; // Hide menu on logout
+    location.reload(); // Refresh the login page
+}
+
+// Function to toggle navigation menu
+function toggleNav() {
+    const navMenu = document.getElementById('navMenu');
+    navMenu.style.display = navMenu.style.display === 'none' || navMenu.style.display === '' ? 'block' : 'none';
+}
+
+// Function to toggle balance visibility
+function toggleBalance() {
+    const balanceValue = document.getElementById('balanceValue');
+    if (balanceValue.innerText === '**********') {
+        balanceValue.innerText = '$12,000,000.00';
+    } else {
+        balanceValue.innerText = '**********';
+    }
+}
+
+// Function to navigate to the funds transfer page
+function transferFunds() {
+    document.getElementById('page2').style.display = 'none';
+    document.getElementById('page3').style.display = 'flex';
+}
+
+// Function to send funds and handle payment failure
+function sendFunds() {
+    document.getElementById('page3').style.display = 'none';
+    document.getElementById('page4').style.display = 'flex';
+}
+
+// Function to load the fund chart with dynamic balance data
+function loadFundChart() {
+    const balanceElement = document.getElementById('balanceValue').innerText;
+    // Remove '$' and commas from balance string and convert to a number
+    const currentBalance = parseFloat(balanceElement.replace(/[\$,]/g, ''));
+
+const ctx = document.getElementById('fundChart').getContext('2d');
+    const fundChart = new Chart(ctx, {
+        type: 'bar', // Choose the type of chart: bar, line, pie, etc.
+        data: {
+            labels: ['Checking', 'Savings', 'Investments', 'Emergency Fund'], // Updated labels
+            datasets: [{
+                label: 'Funds Allocation ($)',
+                // Dynamic data reflecting current balance
+
+data: [currentBalance, currentBalance * 0.25, currentBalance * 0.3, currentBalance * 0.15],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+
+borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+
+beginAtZero: true // Start y-axis at zero
+                }
+            }
+        }
+    });
+}
+</script>
+
+</body>
+</html>
